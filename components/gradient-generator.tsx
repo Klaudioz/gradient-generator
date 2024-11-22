@@ -41,7 +41,7 @@ export default function GradientGenerator() {
 
   useEffect(() => {
     generateRandomGradient()
-  }, [])
+  }, [generateRandomGradient])
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-4">
