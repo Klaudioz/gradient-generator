@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Download, Shuffle } from "lucide-react"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 export default function GradientGenerator() {
   const [colors, setColors] = useState<string[]>(["#FF69B4", "#98FB98", "#FFFFFF"])
@@ -92,17 +94,17 @@ export default function GradientGenerator() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-4">
+    <div className="w-full max-w-5xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gradient Generator</h1>
+        <h1 className="text-3xl font-bold">Gradient Generator</h1>
         <ThemeToggle />
       </div>
       <Card className="overflow-hidden">
-        <div style={gradientStyle} />
+        <div style={{...gradientStyle, height: '400px'}} />
       </Card>
       
       <div className="flex items-center justify-between">
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           {colors.map((color, index) => (
             <div
               key={index}
@@ -113,7 +115,7 @@ export default function GradientGenerator() {
                 type="color"
                 value={color}
                 onChange={(e) => updateColor(index, e.target.value)}
-                className="w-8 h-8 rounded-full cursor-pointer border-2 border-white dark:border-gray-800"
+                className="w-10 h-10 rounded-full cursor-pointer border-2 border-white dark:border-gray-800"
                 style={{
                   background: color,
                   outline: index === selectedColor ? "2px solid rgb(var(--primary))" : "none",
@@ -123,17 +125,42 @@ export default function GradientGenerator() {
           ))}
         </div>
         
-        <div className="flex gap-2">
-          <Button
-            onClick={downloadGradient}
-          >
-            Download Gradient
-          </Button>
-          <Button
-            onClick={generateRandomGradient}
-          >
-            Random Gradient
-          </Button>
+        <div className="flex gap-3">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={downloadGradient}
+                  size="icon"
+                  variant="outline"
+                  className="h-12 w-12"
+                >
+                  <Download className="h-5 w-5" />
+                  <span className="sr-only">Download Gradient</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Download Gradient</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={generateRandomGradient}
+                  size="icon"
+                  variant="outline"
+                  className="h-12 w-12"
+                >
+                  <Shuffle className="h-5 w-5" />
+                  <span className="sr-only">Random Gradient</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Random Gradient</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
 
