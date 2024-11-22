@@ -43,6 +43,54 @@ export default function GradientGenerator() {
     generateRandomGradient()
   }, [generateRandomGradient])
 
+  const downloadGradient = () => {
+    // Create a temporary canvas
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Set canvas size
+    canvas.width = 1920
+    canvas.height = 1080
+
+    // Create gradient
+    // Calculate start and end points to match CSS linear-gradient
+    const angleInRadians = (angle - 90) * (Math.PI / 180)
+    const gradientLength = Math.abs(canvas.width * Math.sin(angleInRadians)) + 
+                          Math.abs(canvas.height * Math.cos(angleInRadians))
+    
+    const centerX = canvas.width / 2
+    const centerY = canvas.height / 2
+    
+    const startX = centerX - Math.cos(angleInRadians) * (gradientLength / 2)
+    const startY = centerY - Math.sin(angleInRadians) * (gradientLength / 2)
+    const endX = centerX + Math.cos(angleInRadians) * (gradientLength / 2)
+    const endY = centerY + Math.sin(angleInRadians) * (gradientLength / 2)
+
+    const gradient = ctx.createLinearGradient(startX, startY, endX, endY)
+    
+    colors.forEach((color, index) => {
+      gradient.addColorStop(index / (colors.length - 1), color)
+    })
+
+    // Fill canvas with gradient
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // Convert to blob and download
+    canvas.toBlob((blob) => {
+      if (!blob) return
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `gradient-${Date.now()}.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }, 'image/png')
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto space-y-4">
       <div className="flex justify-between items-center">
@@ -75,12 +123,19 @@ export default function GradientGenerator() {
           ))}
         </div>
         
-        <Button
-          onClick={generateRandomGradient}
-          className="ml-4"
-        >
-          Random Gradient
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={downloadGradient}
+          >
+            Download Gradient
+          </Button>
+          <Button
+            onClick={generateRandomGradient}
+          >
+            Random Gradient
+          </Button>
+        </div>
       </div>
 
       <div className="text-sm font-mono bg-muted p-3 rounded-lg">
