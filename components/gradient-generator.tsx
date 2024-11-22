@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Download, Shuffle } from "lucide-react"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { ColorPicker } from './color-picker'
 
 export default function GradientGenerator() {
   const [colors, setColors] = useState<string[]>(["#FF69B4", "#98FB98", "#FFFFFF"])
@@ -106,22 +107,12 @@ export default function GradientGenerator() {
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
           {colors.map((color, index) => (
-            <div
+            <ColorPicker
               key={index}
-              className="relative"
-              onClick={() => setSelectedColor(index)}
-            >
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => updateColor(index, e.target.value)}
-                className="w-10 h-10 rounded-full cursor-pointer border-2 border-white dark:border-gray-800"
-                style={{
-                  background: color,
-                  outline: index === selectedColor ? "2px solid rgb(var(--primary))" : "none",
-                }}
-              />
-            </div>
+              value={color}
+              onChange={(newColor) => updateColor(index, newColor)}
+              isSelected={index === selectedColor}
+            />
           ))}
         </div>
         
