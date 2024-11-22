@@ -15,7 +15,7 @@ export function ThemeToggle() {
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
       root.classList.add(systemTheme)
-    } else {
+    } else if (theme) {
       root.classList.add(theme)
     }
   }, [theme])
