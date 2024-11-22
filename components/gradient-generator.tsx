@@ -125,7 +125,6 @@ export default function GradientGenerator() {
         
         <div className="flex gap-2">
           <Button
-            variant="outline"
             onClick={downloadGradient}
           >
             Download Gradient
